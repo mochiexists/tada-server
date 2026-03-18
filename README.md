@@ -1,6 +1,6 @@
 # TADA TTS Server
 
-Local FastAPI server for [HumeAI TADA](https://github.com/HumeAI/tada) text-to-speech.
+Local FastAPI server for [HumeAI TADA](https://github.com/HumeAI/tada) text-to-speech with voice cloning support.
 
 ## Setup
 
@@ -48,11 +48,42 @@ curl -X POST http://127.0.0.1:18793/tts/opus \
   --output speech.opus
 ```
 
+### Voice Cloning
+Clone a voice from a reference audio sample:
+
+```bash
+curl -X POST http://127.0.0.1:18793/tts/clone \
+  -F "audio=@samples/grimes-10s.wav" \
+  -F "transcript=I have a proposition for the communists. So typically most of the communists I know are not big fans of AI. But if you think about it." \
+  -F "text=Hello, I am speaking with a cloned voice." \
+  -F "format=wav" \
+  --output cloned.wav
+```
+
+Parameters:
+- `audio` - Reference audio file (WAV, MP3, etc.) - 5-10 seconds recommended
+- `transcript` - Text transcript of the reference audio
+- `text` - Text to synthesize with cloned voice
+- `format` - Output format: `wav` (default) or `opus`
+
+## Samples
+
+Included samples for testing voice cloning:
+
+- `samples/grimes-communism.mp4` - Source video (46s)
+- `samples/grimes-10s.wav` - Extracted 10s clip for voice prompting
+
 ## Test Client
 ```bash
 python test_client.py "Hello, this is a test!"
 ```
 
-## OpenClaw Integration
+## Notes
 
-Add TADA as a TTS provider in OpenClaw's `tts-core.ts` - see parent project for integration guide.
+- Voice cloning works best with 5-10 second reference clips
+- Longer clips may cause memory issues on 16GB machines
+- The 3B model (`HumeAI/tada-3b-ml`) produces better quality but requires more VRAM
+
+## License
+
+MIT - wrapper code only. TADA model has its own license from HumeAI.

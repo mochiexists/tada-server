@@ -7,12 +7,14 @@ Runs on MPS (Apple Silicon) or CUDA.
 import io
 import os
 import logging
+import tempfile
+import subprocess
 from pathlib import Path
 from typing import Optional
 
 import torch
 import torchaudio
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import Response
 from pydantic import BaseModel
 from huggingface_hub import hf_hub_download
@@ -217,6 +219,90 @@ async def tts_opus(req: TTSRequest):
         raise HTTPException(status_code=500, detail="Audio conversion failed")
     except Exception as e:
         logger.exception("TTS generation failed")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/tts/clone")
+async def tts_clone(
+    audio: UploadFile = File(..., description="Reference audio file (WAV/MP3/etc)"),
+    text: str = Form(..., description="Text to synthesize"),
+    transcript: str = Form(..., description="Transcript of the reference audio"),
+    format: str = Form("wav", description="Output format: wav or opus")
+):
+    """Generate speech cloning a voice from reference audio."""
+    if model is None or encoder is None:
+        raise HTTPException(status_code=503, detail="Model not loaded")
+    
+    if not text.strip():
+        raise HTTPException(status_code=400, detail="Text cannot be empty")
+    
+    if not transcript.strip():
+        raise HTTPException(status_code=400, detail="Transcript cannot be empty")
+    
+    if len(text) > 2000:
+        raise HTTPException(status_code=400, detail="Text too long (max 2000 chars)")
+    
+    try:
+        # Save uploaded audio to temp file
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
+            content = await audio.read()
+            tmp.write(content)
+            tmp_path = tmp.name
+        
+        try:
+            # Load and resample reference audio
+            ref_wav, ref_sr = torchaudio.load(tmp_path)
+            if ref_sr != 24000:
+                ref_wav = torchaudio.functional.resample(ref_wav, ref_sr, 24000)
+                ref_sr = 24000
+            ref_wav = ref_wav.to(DEVICE)
+            
+            # Create voice prompt from reference
+            voice_prompt = encoder(ref_wav, text=[transcript], sample_rate=ref_sr)
+            
+            # Generate with cloned voice
+            with torch.no_grad():
+                output = model.generate(prompt=voice_prompt, text=text)
+            
+            # Convert to output format
+            audio_out = output.audio[0].cpu()
+            if audio_out.dim() == 1:
+                audio_out = audio_out.unsqueeze(0)
+            
+            if format == "opus":
+                # Save as WAV then convert to Opus
+                with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as wav_tmp:
+                    torchaudio.save(wav_tmp.name, audio_out, 24000, format="wav")
+                    wav_path = wav_tmp.name
+                
+                try:
+                    result = subprocess.run(
+                        ["ffmpeg", "-y", "-i", wav_path, "-c:a", "libopus", "-b:a", "64k", "-f", "opus", "-"],
+                        capture_output=True,
+                        check=True
+                    )
+                    return Response(
+                        content=result.stdout,
+                        media_type="audio/opus",
+                        headers={"X-TADA-Model": MODEL_ID}
+                    )
+                finally:
+                    os.unlink(wav_path)
+            else:
+                # Return as WAV
+                buffer = io.BytesIO()
+                torchaudio.save(buffer, audio_out, 24000, format="wav")
+                buffer.seek(0)
+                return Response(
+                    content=buffer.read(),
+                    media_type="audio/wav",
+                    headers={"X-TADA-Model": MODEL_ID}
+                )
+        finally:
+            os.unlink(tmp_path)
+    
+    except Exception as e:
+        logger.exception("Voice cloning failed")
         raise HTTPException(status_code=500, detail=str(e))
 
 
