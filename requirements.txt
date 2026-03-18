@@ -1,0 +1,6 @@
+hume-tada>=0.1.8
+fastapi>=0.109.0
+uvicorn>=0.27.0
+torch>=2.2.0
+torchaudio>=2.2.0
+huggingface_hub>=0.20.0
