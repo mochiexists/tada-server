@@ -14,3 +14,6 @@ __pycache__/
 
 # Cache
 *.pt
+audio_outputs/
+output_samples/
+samples/*.wav

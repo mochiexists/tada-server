@@ -84,6 +84,18 @@ python test_client.py "Hello, this is a test!"
 - Longer clips may cause memory issues on 16GB machines
 - The 3B model (`HumeAI/tada-3b-ml`) produces better quality but requires more VRAM
 
+## Benchmarks
+
+Use `benchmark.py` to compare the PyTorch baseline (`mps`, `cpu`, `cuda`) against the MLX ports. MLX results are now labeled by implementation, so `mlx/claude`, `mlx/codex`, and the baseline rows stay distinct in both the console summary and the generated Markdown tables.
+
+```bash
+# Compare baseline MPS against both MLX implementations
+python benchmark.py --devices mps,mlx --mlx-impls claude,codex
+
+# Narrow run: one model, one MLX implementation
+python benchmark.py --models HumeAI/tada-1b --devices mlx --mlx-impls codex --prompts short --voice-refs ljspeech
+```
+
 ## License
 
 MIT - wrapper code only. TADA model has its own license from HumeAI.

@@ -1,0 +1,303 @@
+{
+  "timestamp": "2026-03-18 19:51:30 UTC",
+  "system": {
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "arm",
+    "python_version": "3.11.15",
+    "torch_version": "2.7.1",
+    "ram_total_gb": 48.0,
+    "cpu_count": 14,
+    "cpu_count_physical": 14,
+    "mps_available": true,
+    "chip": "Apple M4 Pro"
+  },
+  "benchmarks": [
+    {
+      "model_id": "HumeAI/tada-1b",
+      "device": "mps",
+      "dtype": "torch.bfloat16",
+      "total_params": 1753588834,
+      "param_memory_mb": 3571.1,
+      "voice_ref": "grimes-10s",
+      "voice_ref_duration_s": 10.0,
+      "stages": [
+        {
+          "stage": "encoder_load",
+          "duration_s": 3.0,
+          "memory": {
+            "rss_mb": 1599.8,
+            "vms_mb": 426839.8,
+            "mps_allocated_mb": 2468.7,
+            "mps_driver_mb": 3120.5,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "model_load",
+          "duration_s": 4.8,
+          "memory": {
+            "rss_mb": 1115.2,
+            "vms_mb": 428343.2,
+            "mps_allocated_mb": 6447.8,
+            "mps_driver_mb": 7232.5,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "prompt_encode",
+          "duration_s": 1.6,
+          "memory": {
+            "rss_mb": 1402.9,
+            "vms_mb": 428966.2,
+            "mps_allocated_mb": 10665.2,
+            "mps_driver_mb": 11448.8,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "cleanup",
+          "duration_s": 0,
+          "memory": {
+            "rss_mb": 1884.9,
+            "vms_mb": 427895.2,
+            "mps_allocated_mb": 0.0,
+            "mps_driver_mb": 51.7,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        }
+      ],
+      "generations": [
+        {
+          "prompt_name": "short",
+          "prompt_chars": 25,
+          "prompt_words": 5,
+          "audio_duration_s": 1.16,
+          "generation_time_s": 4.29,
+          "rtf": 3.7,
+          "memory_before": {
+            "rss_mb": 1402.9,
+            "vms_mb": 428966.2,
+            "mps_allocated_mb": 10665.2,
+            "mps_driver_mb": 11448.8,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 1670.5,
+            "vms_mb": 428970.5,
+            "mps_allocated_mb": 6451.2,
+            "mps_driver_mb": 11499.3,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 1670.5,
+          "voice_ref": "grimes-10s",
+          "voice_ref_duration_s": 10.0
+        },
+        {
+          "prompt_name": "medium",
+          "prompt_chars": 185,
+          "prompt_words": 35,
+          "audio_duration_s": 9.98,
+          "generation_time_s": 8.56,
+          "rtf": 0.86,
+          "memory_before": {
+            "rss_mb": 1785.2,
+            "vms_mb": 428970.5,
+            "mps_allocated_mb": 6450.9,
+            "mps_driver_mb": 7323.3,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 1877.2,
+            "vms_mb": 428970.0,
+            "mps_allocated_mb": 6452.1,
+            "mps_driver_mb": 7315.5,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 1877.2,
+          "voice_ref": "grimes-10s",
+          "voice_ref_duration_s": 10.0
+        },
+        {
+          "prompt_name": "long",
+          "prompt_chars": 500,
+          "prompt_words": 99,
+          "audio_duration_s": 28.08,
+          "generation_time_s": 14.86,
+          "rtf": 0.53,
+          "memory_before": {
+            "rss_mb": 1877.2,
+            "vms_mb": 428970.0,
+            "mps_allocated_mb": 6450.9,
+            "mps_driver_mb": 7299.5,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 2004.6,
+            "vms_mb": 428970.2,
+            "mps_allocated_mb": 6453.9,
+            "mps_driver_mb": 8419.7,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 2004.6,
+          "voice_ref": "grimes-10s",
+          "voice_ref_duration_s": 10.0
+        }
+      ],
+      "error": null
+    },
+    {
+      "model_id": "HumeAI/tada-1b",
+      "device": "mps",
+      "dtype": "torch.bfloat16",
+      "total_params": 1753588834,
+      "param_memory_mb": 3571.1,
+      "voice_ref": "grimes-28s",
+      "voice_ref_duration_s": 28.0,
+      "stages": [
+        {
+          "stage": "encoder_load",
+          "duration_s": 2.6,
+          "memory": {
+            "rss_mb": 2253.4,
+            "vms_mb": 426998.9,
+            "mps_allocated_mb": 2468.7,
+            "mps_driver_mb": 3167.7,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "model_load",
+          "duration_s": 2.7,
+          "memory": {
+            "rss_mb": 3156.2,
+            "vms_mb": 427980.3,
+            "mps_allocated_mb": 6447.8,
+            "mps_driver_mb": 7235.7,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "prompt_encode",
+          "duration_s": 3.2,
+          "memory": {
+            "rss_mb": 1934.3,
+            "vms_mb": 429344.5,
+            "mps_allocated_mb": 17307.1,
+            "mps_driver_mb": 19433.6,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "cleanup",
+          "duration_s": 0,
+          "memory": {
+            "rss_mb": 2067.9,
+            "vms_mb": 428289.3,
+            "mps_allocated_mb": 0.0,
+            "mps_driver_mb": 54.0,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        }
+      ],
+      "generations": [
+        {
+          "prompt_name": "short",
+          "prompt_chars": 25,
+          "prompt_words": 5,
+          "audio_duration_s": 1.5,
+          "generation_time_s": 3.53,
+          "rtf": 2.35,
+          "memory_before": {
+            "rss_mb": 1934.3,
+            "vms_mb": 429344.5,
+            "mps_allocated_mb": 17307.1,
+            "mps_driver_mb": 19433.6,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 2036.2,
+            "vms_mb": 429344.7,
+            "mps_allocated_mb": 6456.0,
+            "mps_driver_mb": 19371.8,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 2036.2,
+          "voice_ref": "grimes-28s",
+          "voice_ref_duration_s": 28.0
+        },
+        {
+          "prompt_name": "medium",
+          "prompt_chars": 185,
+          "prompt_words": 35,
+          "audio_duration_s": 9.2,
+          "generation_time_s": 6.12,
+          "rtf": 0.67,
+          "memory_before": {
+            "rss_mb": 2036.2,
+            "vms_mb": 429336.7,
+            "mps_allocated_mb": 6455.6,
+            "mps_driver_mb": 7325.8,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 2116.3,
+            "vms_mb": 429345.3,
+            "mps_allocated_mb": 6456.7,
+            "mps_driver_mb": 7381.9,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 2116.3,
+          "voice_ref": "grimes-28s",
+          "voice_ref_duration_s": 28.0
+        },
+        {
+          "prompt_name": "long",
+          "prompt_chars": 500,
+          "prompt_words": 99,
+          "audio_duration_s": 21.86,
+          "generation_time_s": 16.01,
+          "rtf": 0.73,
+          "memory_before": {
+            "rss_mb": 2116.3,
+            "vms_mb": 429345.3,
+            "mps_allocated_mb": 6455.6,
+            "mps_driver_mb": 7285.9,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 2225.6,
+            "vms_mb": 429345.3,
+            "mps_allocated_mb": 6458.2,
+            "mps_driver_mb": 8414.0,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 2225.6,
+          "voice_ref": "grimes-28s",
+          "voice_ref_duration_s": 28.0
+        }
+      ],
+      "error": null
+    }
+  ]
+}

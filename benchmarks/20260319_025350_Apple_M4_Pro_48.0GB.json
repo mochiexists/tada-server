@@ -1,0 +1,174 @@
+{
+  "timestamp": "2026-03-19 02:44:51 UTC",
+  "system": {
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "arm",
+    "python_version": "3.11.15",
+    "torch_version": "2.7.1",
+    "ram_total_gb": 48.0,
+    "cpu_count": 14,
+    "cpu_count_physical": 14,
+    "mps_available": true,
+    "chip": "Apple M4 Pro"
+  },
+  "benchmarks": [
+    {
+      "model_id": "HumeAI/tada-1b",
+      "device": "mps",
+      "dtype": "torch.bfloat16",
+      "total_params": 1753588834,
+      "param_memory_mb": 3571.1,
+      "implementation": "baseline",
+      "voice_ref": "ljspeech",
+      "voice_ref_duration_s": 7.6,
+      "stages": [
+        {
+          "stage": "encoder_load",
+          "duration_s": 72.8,
+          "memory": {
+            "rss_mb": 86.5,
+            "vms_mb": 426840.3,
+            "mps_allocated_mb": 2468.7,
+            "mps_driver_mb": 3120.5,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "model_load",
+          "duration_s": 11.3,
+          "memory": {
+            "rss_mb": 1437.4,
+            "vms_mb": 428343.1,
+            "mps_allocated_mb": 6447.8,
+            "mps_driver_mb": 7232.5,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "prompt_encode",
+          "duration_s": 16.8,
+          "memory": {
+            "rss_mb": 803.5,
+            "vms_mb": 427028.5,
+            "mps_allocated_mb": 9515.3,
+            "mps_driver_mb": 9848.7,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        },
+        {
+          "stage": "cleanup",
+          "duration_s": 0,
+          "memory": {
+            "rss_mb": 517.7,
+            "vms_mb": 425886.6,
+            "mps_allocated_mb": 0.0,
+            "mps_driver_mb": 3.6,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          }
+        }
+      ],
+      "generations": [
+        {
+          "prompt_name": "short",
+          "prompt_chars": 25,
+          "prompt_words": 5,
+          "audio_duration_s": 2.14,
+          "generation_time_s": 25.72,
+          "rtf": 12.02,
+          "memory_before": {
+            "rss_mb": 804.5,
+            "vms_mb": 427028.5,
+            "mps_allocated_mb": 9514.6,
+            "mps_driver_mb": 9848.7,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 417.5,
+            "vms_mb": 425903.9,
+            "mps_allocated_mb": 6450.8,
+            "mps_driver_mb": 9863.2,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 417.5,
+          "voice_ref": "ljspeech",
+          "voice_ref_duration_s": 7.6
+        },
+        {
+          "prompt_name": "medium",
+          "prompt_chars": 185,
+          "prompt_words": 35,
+          "audio_duration_s": 12.14,
+          "generation_time_s": 53.29,
+          "rtf": 4.39,
+          "memory_before": {
+            "rss_mb": 591.5,
+            "vms_mb": 425895.9,
+            "mps_allocated_mb": 6450.0,
+            "mps_driver_mb": 7295.2,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 712.0,
+            "vms_mb": 425902.9,
+            "mps_allocated_mb": 6451.4,
+            "mps_driver_mb": 7307.3,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 712.0,
+          "voice_ref": "ljspeech",
+          "voice_ref_duration_s": 7.6
+        },
+        {
+          "prompt_name": "long",
+          "prompt_chars": 500,
+          "prompt_words": 99,
+          "audio_duration_s": 25.14,
+          "generation_time_s": 183.84,
+          "rtf": 7.31,
+          "memory_before": {
+            "rss_mb": 712.0,
+            "vms_mb": 425902.9,
+            "mps_allocated_mb": 6450.0,
+            "mps_driver_mb": 7299.3,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_after": {
+            "rss_mb": 252.6,
+            "vms_mb": 425903.2,
+            "mps_allocated_mb": 6452.7,
+            "mps_driver_mb": 8391.6,
+            "cuda_allocated_mb": 0.0,
+            "cuda_reserved_mb": 0.0
+          },
+          "memory_peak_rss_mb": 252.6,
+          "voice_ref": "ljspeech",
+          "voice_ref_duration_s": 7.6
+        }
+      ],
+      "error": null
+    },
+    {
+      "model_id": "HumeAI/tada-1b",
+      "device": "mlx",
+      "dtype": "torch.bfloat16",
+      "total_params": 0,
+      "param_memory_mb": 0.0,
+      "implementation": "unknown",
+      "voice_ref": "ljspeech",
+      "voice_ref_duration_s": 0.0,
+      "stages": [],
+      "generations": [],
+      "error": "cannot access local variable 'encoder' where it is not associated with a value"
+    }
+  ]
+}

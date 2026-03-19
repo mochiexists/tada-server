@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-03-19 02:28:07 UTC",
+  "system": {
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "arm",
+    "python_version": "3.11.15",
+    "torch_version": "2.7.1",
+    "ram_total_gb": 48.0,
+    "cpu_count": 14,
+    "cpu_count_physical": 14,
+    "mps_available": true,
+    "chip": "Apple M4 Pro"
+  },
+  "benchmarks": [
+    {
+      "model_id": "HumeAI/tada-1b",
+      "device": "mlx",
+      "dtype": "torch.bfloat16",
+      "total_params": 0,
+      "param_memory_mb": 0.0,
+      "implementation": "unknown",
+      "voice_ref": "ljspeech",
+      "voice_ref_duration_s": 0.0,
+      "stages": [],
+      "generations": [],
+      "error": "No module named 'mlx'"
+    }
+  ]
+}

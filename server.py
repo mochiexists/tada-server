@@ -9,9 +9,11 @@ import os
 import logging
 import tempfile
 import subprocess
+import time
 from pathlib import Path
 from typing import Optional
 
+import psutil
 import torch
 import torchaudio
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
@@ -95,28 +97,57 @@ def load_or_create_default_prompt() -> EncoderOutput:
     return prompt
 
 
+def log_memory(label):
+    """Log current memory usage."""
+    process = psutil.Process(os.getpid())
+    rss = process.memory_info().rss / 1024**3
+    msg = f"[MEM] {label}: RSS={rss:.2f}GB"
+    if DEVICE == "mps":
+        mps_alloc = torch.mps.current_allocated_memory() / 1024**3
+        mps_driver = torch.mps.driver_allocated_memory() / 1024**3
+        msg += f", MPS_alloc={mps_alloc:.2f}GB, MPS_driver={mps_driver:.2f}GB"
+    elif DEVICE == "cuda":
+        cuda_alloc = torch.cuda.memory_allocated() / 1024**3
+        msg += f", CUDA_alloc={cuda_alloc:.2f}GB"
+    logger.info(msg)
+
+
 @app.on_event("startup")
 async def startup():
     global encoder, model, default_prompt
-    
+
     logger.info(f"Loading TADA model: {MODEL_ID}")
     logger.info(f"Device: {DEVICE}, dtype: {DTYPE}")
-    
+    logger.info(f"System RAM: {psutil.virtual_memory().total / 1024**3:.1f}GB")
+    log_memory("baseline")
+
     # Load encoder separately (saves ~2.5GB VRAM)
+    t0 = time.time()
     encoder = Encoder.from_pretrained(
         "HumeAI/tada-codec",
         subfolder="encoder"
     ).to(DEVICE)
-    
+    logger.info(f"Encoder loaded in {time.time()-t0:.1f}s")
+    log_memory("after encoder")
+
     # Load model
+    t0 = time.time()
     model = TadaForCausalLM.from_pretrained(
         MODEL_ID,
         torch_dtype=DTYPE
     ).to(DEVICE)
-    
+    logger.info(f"Model loaded in {time.time()-t0:.1f}s")
+    log_memory("after model")
+
+    total_params = sum(p.numel() for p in model.parameters())
+    logger.info(f"Model parameters: {total_params:,}")
+
     # Pre-load default voice prompt
+    t0 = time.time()
     default_prompt = load_or_create_default_prompt()
-    
+    logger.info(f"Default prompt loaded in {time.time()-t0:.1f}s")
+    log_memory("after prompt")
+
     logger.info("TADA server ready!")
 
 
@@ -127,6 +158,49 @@ async def health():
         model=MODEL_ID,
         device=DEVICE
     )
+
+
+@app.get("/stats")
+async def stats():
+    """Memory usage and system stats."""
+    process = psutil.Process(os.getpid())
+    mem = process.memory_info()
+
+    result = {
+        "model": MODEL_ID,
+        "device": DEVICE,
+        "dtype": str(DTYPE),
+        "process": {
+            "rss_mb": round(mem.rss / 1024 / 1024, 1),
+            "vms_mb": round(mem.vms / 1024 / 1024, 1),
+        },
+        "system": {
+            "total_ram_gb": round(psutil.virtual_memory().total / 1024**3, 1),
+            "available_ram_gb": round(psutil.virtual_memory().available / 1024**3, 1),
+            "ram_percent": psutil.virtual_memory().percent,
+        },
+    }
+
+    if DEVICE == "mps":
+        result["mps"] = {
+            "allocated_mb": round(torch.mps.current_allocated_memory() / 1024**2, 1),
+            "driver_mb": round(torch.mps.driver_allocated_memory() / 1024**2, 1),
+        }
+    elif DEVICE == "cuda":
+        result["cuda"] = {
+            "allocated_mb": round(torch.cuda.memory_allocated() / 1024**2, 1),
+            "reserved_mb": round(torch.cuda.memory_reserved() / 1024**2, 1),
+        }
+
+    if model is not None:
+        total_params = sum(p.numel() for p in model.parameters())
+        param_bytes = sum(p.numel() * p.element_size() for p in model.parameters())
+        result["model_params"] = {
+            "total": total_params,
+            "memory_mb": round(param_bytes / 1024**2, 1),
+        }
+
+    return result
 
 
 @app.post("/tts")
